@@ -4,4 +4,16 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Foundry/levels/multi/shrine/shrine.unity
+    guid: 2372d162c877c7c41a643da2bfef39bb
+  - enabled: 1
+    path: Assets/Foundry/levels/multi/guardian/guardian.unity
+    guid: 95345cd1d74a7ae438f681e9981c3135
+  - enabled: 1
+    path: Assets/Foundry/levels/dlc/bunkerworld/bunkerworld.unity
+    guid: 07f60d3c8b68fe046b4a3bef6b3d9a63
+  - enabled: 1
+    path: Assets/Foundry/levels/other/startup/startup.unity
+    guid: a11c23f1e59c6d944b11f5cb85057951

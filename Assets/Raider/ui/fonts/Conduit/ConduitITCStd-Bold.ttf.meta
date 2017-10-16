@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: e36042c6f9e5f244ea17822a81402b54
+timeCreated: 1470952465
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - ConduitITCStd
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: bd8d8233716c60d48bc2209e1fd725e1, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

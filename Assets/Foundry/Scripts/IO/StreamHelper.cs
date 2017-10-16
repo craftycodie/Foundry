@@ -138,8 +138,8 @@ namespace Foundry.IO
 
         public string ReadUTF16(int length)
         {
-            var buff = new byte[length * 2];
-            Stream.Read(buff, 0, length * 2);
+            var buff = new byte[length];
+            Stream.Read(buff, 0, length);
             return Encoding.Unicode.GetString(buff).TrimEnd('\0');
         }
 
@@ -162,6 +162,29 @@ namespace Foundry.IO
             return buff;
         }
 
+		public Vector2 ReadVector2()
+		{
+			return new Vector2(ReadFloat(), ReadFloat());
+		}
+
+		public void WriteVector2(Vector2 value)
+		{
+			WriteFloat(value.x);
+			WriteFloat(value.y);
+		}
+
+		public Vector3 ReadVector3()
+		{
+			return new Vector3(ReadFloat(), ReadFloat(), ReadFloat());
+		}
+
+		public void WriteVector3(Vector3 value)
+		{
+			WriteFloat(value.x);
+			WriteFloat(value.y);
+			WriteFloat(value.z);
+		}
+
         public void WriteBytes(byte[] bytes)
         {
             Stream.Write(bytes, 0, bytes.Length);
@@ -174,7 +197,7 @@ namespace Foundry.IO
 
         internal void WriteUTF16(string value, int length)
         {
-            WriteBytes(Encoding.BigEndianUnicode.GetBytes(value.PadRight(length, '\0')));
+            WriteBytes(Encoding.Unicode.GetBytes(value.PadRight(length, '\0')));
         }
 
         internal void WriteAscii(string value, int length)

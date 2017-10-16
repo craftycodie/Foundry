@@ -16,6 +16,13 @@ namespace Foundry.HaloOnline
             map = DeserializeSandboxMap(streamHelper);
         }
 
+        public Sandbox(Stream stream)
+        {
+            streamHelper = new StreamHelper(stream);
+            header = DeserializeContentHeader(streamHelper);
+            map = DeserializeSandboxMap(streamHelper);
+        }
+
         ~Sandbox()
         {
             streamHelper.Dispose();

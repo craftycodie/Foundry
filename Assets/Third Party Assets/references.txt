@@ -1,0 +1,6 @@
+﻿Frosted Glass Shader 
+Rendering\Shaders\FrostedGlass 
+A blur shader used throughout Ui. 
+Found on the Unity forums, free to use. Created by "Megagamefan100", modified by "pedroahpolonio". 
+Last accessed 22/2/17 
+https://forum.unity3d.com/threads/solved-dynamic-blurred-background-on-ui.345083/ 

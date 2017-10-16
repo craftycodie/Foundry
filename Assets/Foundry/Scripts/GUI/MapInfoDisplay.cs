@@ -1,46 +1,87 @@
-﻿using UnityEngine;
-using System.Collections;
-using Foundry;
-using UnityEngine.UI;
+﻿using Foundry.Common.Helpers;
 using Foundry.HaloOnline;
 using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Foundry.GUI
 {
+	[RequireComponent(typeof(CanvasGroup))]
     public class MapInfoDisplay : MonoBehaviour
     {
-        public Text baseMapName;
-        public Text mapName;
-        public Text editedMapName;
-        public Text mapDescription;
-        public Text editedMapDescription;
-        public Text mapAuthor;
-        public Text editedMapAuthor;
-        public Text creationDate;
+		//Assigned in inspector.
+        //public Text baseMapName;
+        public InputField editedMapName;
+        public InputField editedMapDescription;
+        public InputField editedMapAuthor;
         public Text lastEditDate;
 
+		//Required
+		private CanvasGroup canvasGroup;
 
-        private void Start()
+		bool open = false;
+		bool Open
+		{
+			get { return open; }
+			set
+			{
+				canvasGroup.alpha = value ? 1 : 0;
+				canvasGroup.interactable = value;
+				this.open = value;
+				Session.Paused = value;
+
+				if (value)
+					UpdateDisplay(Session.mapVariantFile.MapVariant);
+			}
+		}
+
+
+		//Unity's events aren't great.
+		//With no sender, I need to track what's updating the map information.
+		//So this bool will be set to true if scripts are updating the information.
+
+		bool ignoreChangeEvents = false;
+
+		public void SaveSandboxHeader()
+		{
+			if (ignoreChangeEvents)
+				return;
+
+			Session.mapVariantFile.MapVariant.VariantAuthor = editedMapAuthor.text.Replace("	", "");
+			Session.mapVariantFile.MapVariant.VariantDescription = editedMapDescription.text.Replace("	", ""); ;
+			Session.mapVariantFile.MapVariant.VariantName = editedMapName.text.Replace("	", ""); ;
+			Session.mapVariantFile.MapVariant.VariantCreationDate = TimestampHelper.ToTimestamp(DateTime.Now);
+
+			Session.mapVariantFile.SaveFile();
+
+			UpdateDisplay(Session.mapVariantFile.MapVariant);
+		}
+
+		private void Update()
+		{
+			if(Input.GetKeyDown(KeyCode.Tab))
+				Open = !Open;
+		}
+
+		private void Start()
         {
-            //Session.singleton.sandboxUpdated += UpdateInfo;
-            UpdateInfo(Session.singleton.sandbox);
+			canvasGroup = GetComponent<CanvasGroup>();
+
+            //Session.SandboxUpdated += UpdateInfo;
+            UpdateDisplay(Session.mapVariantFile.MapVariant);
         }
 
-        void UpdateInfo(Sandbox sandbox)
+        void UpdateDisplay(MapVariant mapVariant)
         {
-            baseMapName.text = Maps.mapIDs[sandbox.header.MapID] + ", " + sandbox.header.MapID;
-            mapName.text = sandbox.header.CreationVarientName;
-            editedMapName.text = sandbox.header.VarientName;
-            mapDescription.text = sandbox.header.CreationVarientDescription;
-            editedMapDescription.text = sandbox.header.VarientDescription;
-            mapAuthor.text = sandbox.header.CreationVarientAuthor;
-            editedMapAuthor.text = sandbox.header.VarientAuthor;
+			ignoreChangeEvents = true;
 
-            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(sandbox.header.CreationDate).ToLocalTime();
-            creationDate.text = dt.ToString();
+			//baseMapName.text = Maps.GetMapByID(sandbox.header.MapID).mapName + ", " + sandbox.header.MapID;
+            editedMapName.text = mapVariant.VariantName;
+            editedMapDescription.text = mapVariant.VariantDescription;
+            editedMapAuthor.text = mapVariant.VariantAuthor;
+            lastEditDate.text = TimestampHelper.ToDateTime(mapVariant.VariantCreationDate).ToString();
 
-            dt = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(sandbox.header.ModificationDate).ToLocalTime();
-            lastEditDate.text = dt.ToString();
-        }
+			ignoreChangeEvents = false;
+		}
     }
 }
